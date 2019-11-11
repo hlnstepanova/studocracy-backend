@@ -1,11 +1,13 @@
 import 'package:aqueduct/aqueduct.dart';
 import 'package:studocracy_backend/studocracy_backend.dart';
+import 'package:uuid/uuid.dart';
 import '../model/feedback.dart';
 import '../model/lecture.dart';
 import '../model/lecture_posted.dart';
 import '../model/rating.dart';
 
 class LectureController extends ResourceController{
+  var uuid = Uuid();
   final _lectures = [
     Lecture("lectureId1","AppDev and bla", DateTime.now().add(const Duration(minutes: 90))),
     Lecture("lectureId2","IKT", DateTime.now().add(const Duration(minutes: 90))),
@@ -41,6 +43,16 @@ class LectureController extends ResourceController{
     }
 
     return Response.ok(lecture.feedbackList);
+  }
+
+  @Operation.post()
+  Future<Response>createLecture(@Bind.body() LecturePosted lecturePosted) async{
+
+    String id = uuid.v4();
+    var lecture = Lecture(id, lecturePosted.title, lecturePosted.endTime);
+    _lectures.add(lecture);
+
+    return Response.ok(lecture);
   }
 
 

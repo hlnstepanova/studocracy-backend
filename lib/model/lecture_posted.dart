@@ -1,5 +1,5 @@
 import 'package:aqueduct/aqueduct.dart';
-import 'dart:convert';
+import 'package:convert/convert.dart';
 
 class LecturePosted implements Serializable{
   LecturePosted(this.title, this.endTime);
@@ -15,9 +15,8 @@ class LecturePosted implements Serializable{
   }
 
   void readFromMap(Map<String, dynamic> inputMap) {
-    title = inputMap['title'].toString();
-    // TODO: find a way to convert
-    // endTime = inputMap['endTime'];
+    title = inputMap['title'] as String;
+    endTime = inputMap['endTime'] as DateTime;
   }
 
 
