@@ -1,3 +1,5 @@
+import 'package:aqueduct/aqueduct.dart';
+
 class Rating {
   Rating(this.clientId, this.lectureId, this.category, this.value);
 
