@@ -17,14 +17,21 @@ class Lecture extends Serializable{
   List<Feedback> feedbackList = [];
 
   @override
-  Map<String, dynamic> asMap() {
-    // TODO: implement asMap
-    return null;
-  }
+  Map<String, dynamic> asMap() => {
+    "id": id,
+    "title": title,
+    "endTime":  endTime.toIso8601String(),
+    "ratings": ratings,
+    "feedbackList":feedbackList.asMap(),
+  };
 
   @override
   void readFromMap(Map<String, dynamic> object) {
-    // TODO: implement readFromMap
+    id = object['id'] as String;
+    title = object['title'] as String;
+    endTime = object['endTime'] as DateTime;
+    ratings = object['ratings'] as Map<String, List<Rating>>;
+    feedbackList = object['feedbackList'] as List<Feedback>;
   }
 
 
