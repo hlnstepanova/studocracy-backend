@@ -5,6 +5,7 @@ import 'rating.dart';
 class Lecture extends Serializable{
 
   Lecture(this.id, this.title, this.endTime);
+  Lecture.sample(this.id, this.title, this.endTime, this.ratings, this.feedbackList);
 
   String id;
   String title;
