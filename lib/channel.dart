@@ -28,7 +28,7 @@ class StudocracyBackendChannel extends ApplicationChannel {
     final router = Router();
 
     router
-        .route('/lectures/[[:id/[:category]]')
+        .route('/lectures/[:id/[:category]]')
         .link(()=>LectureController());
 
 
