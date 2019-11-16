@@ -49,7 +49,7 @@ class LectureController extends ResourceController{
   Future<Response>createLecture(@Bind.body() LecturePosted lecturePosted) async{
 
     String id = uuid.v4();
-    var lecture = Lecture(id, lecturePosted.title, lecturePosted.endTime);
+    final lecture = Lecture(id, lecturePosted.title, lecturePosted.endTime);
     _lectures.add(lecture);
 
     return Response.ok(lecture);

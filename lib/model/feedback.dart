@@ -1,6 +1,6 @@
-import 'package:aqueduct/aqueduct.dart';
+import 'package:studocracy_backend/studocracy_backend.dart';
 
-class Feedback implements Serializable{
+class Feedback extends Serializable{
 
   Feedback(this.clientId, this.lectureId, this.message, this.sentiment);
 
@@ -10,14 +10,12 @@ class Feedback implements Serializable{
   int sentiment;
 
   @override
-  Map<String, dynamic> asMap() {
-    return {
+  Map<String, dynamic> asMap() => {
       "clientId": clientId,
       "lectureId": lectureId,
       "message": message,
       "sentiment": sentiment
     };
-  }
 
   @override
   void readFromMap(Map<String, dynamic> inputMap) {
@@ -25,17 +23,6 @@ class Feedback implements Serializable{
     lectureId = inputMap['lectureId'] as String;
     message = inputMap['message'] as String;
     sentiment = inputMap['clientId'] as int;
-  }
-
-  @override
-  APISchemaObject documentSchema(APIDocumentContext context) {
-    // not used
-    return null;
-  }
-
-  @override
-  void read(Map<String, dynamic> object, {Iterable<String> ignore, Iterable<String> reject, Iterable<String> require}) {
-    // not used
   }
 
   }
