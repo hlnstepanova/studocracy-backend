@@ -22,8 +22,12 @@ class Lecture extends Serializable{
     "id": id,
     "title": title,
     "endTime":  endTime.toIso8601String(),
-    "ratings": ratings,
-    "feedbackList":feedbackList.asMap(),
+    "ratings": {
+      "speedRatings" : ratings['speedRatings'].map((rating) => rating.asMap()).toList(),
+      "sizeRatings" : ratings['sizeRatings'].map((rating) => rating.asMap()).toList(),
+      "interestRatings" : ratings['interestRatings'].map((rating) => rating.asMap()).toList(),
+    },
+    "feedbackList": feedbackList.map((feedback) => feedback.asMap()).toList(),
   };
 
   @override
@@ -32,6 +36,8 @@ class Lecture extends Serializable{
     title = object['title'] as String;
     endTime = object['endTime'] as DateTime;
     ratings = object['ratings'] as Map<String, List<Rating>>;
+
+    //TODO: not sure this will work, need to check
     feedbackList = object['feedbackList'] as List<Feedback>;
   }
 

@@ -18,19 +18,19 @@ class LectureController extends ResourceController{
       {
         "speedRatings" : [
           Rating("c1", "lectureId1", "speedRatings", 2.5),
-          Rating("c3", "lectureId1", "speedRatings", 9),
-          Rating("c2", "lectureId1", "speedRatings", 8)
+          Rating("c3", "lectureId1", "speedRatings", 9.0),
+          Rating("c2", "lectureId1", "speedRatings", 8.0)
         ],
 
         "sizeRatings" : [
-          Rating("c1", "lectureId1", "sizeRatings", 4),
-          Rating("c3", "lectureId1", "sizeRatings", 5)
+          Rating("c1", "lectureId1", "sizeRatings", 4.4),
+          Rating("c3", "lectureId1", "sizeRatings", 5.6)
         ],
 
         "interestRatings" : [
-          Rating("c1", "lectureId1", "interestRatings", 2),
-          Rating("c2", "lectureId1", "interestRatings", 5),
-          Rating("c3", "lectureId1", "interestRatings", 9)
+          Rating("c1", "lectureId1", "interestRatings", 2.1),
+          Rating("c2", "lectureId1", "interestRatings", 5.2),
+          Rating("c3", "lectureId1", "interestRatings", 9.3)
         ]
       },
         [
@@ -47,20 +47,20 @@ class LectureController extends ResourceController{
         DateTime.now().add(const Duration(minutes: 90)),
         {
           "speedRatings" : [
-            Rating("c1", "lectureId2", "speedRatings", 1),
-            Rating("c3", "lectureId2", "speedRatings", 7),
-            Rating("c2", "lectureId2", "speedRatings", 6)
+            Rating("c1", "lectureId2", "speedRatings", 1.5),
+            Rating("c3", "lectureId2", "speedRatings", 7.7),
+            Rating("c2", "lectureId2", "speedRatings", 6.7)
           ],
 
           "sizeRatings" : [
-            Rating("c1", "lectureId2", "sizeRatings", 1),
-            Rating("c3", "lectureId2", "sizeRatings", 2)
+            Rating("c1", "lectureId2", "sizeRatings", 1.6),
+            Rating("c3", "lectureId2", "sizeRatings", 2.3)
           ],
 
           "interestRatings" : [
-            Rating("c1", "lectureId2", "interestRatings", 3),
-            Rating("c2", "lectureId2", "interestRatings", 4),
-            Rating("c3", "lectureId2", "interestRatings", 5)
+            Rating("c1", "lectureId2", "interestRatings", 3.3),
+            Rating("c2", "lectureId2", "interestRatings", 4.2),
+            Rating("c3", "lectureId2", "interestRatings", 5.9)
           ]
         },
         [
