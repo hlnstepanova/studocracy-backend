@@ -1,3 +1,5 @@
+import 'package:studocracy_backend/controller/rating_controller.dart';
+
 import 'controller/lecture_controller.dart';
 import 'studocracy_backend.dart';
 
@@ -32,17 +34,12 @@ class StudocracyBackendChannel extends ApplicationChannel {
     final router = Router();
 
     router
-        .route('/lectures/[:id/[:category]]')
-        .link(()=>LectureController(context));
+      .route('/lectures/[:id/]')
+      .link(() => LectureController(context));
 
-
-    // Prefer to use `link` instead of `linkFunction`.
-    // See: https://aqueduct.io/docs/http/request_controller/
     router
-      .route("/example")
-      .linkFunction((request) async {
-        return Response.ok({"key": "value"});
-      });
+      .route('/rating/[:id/[:category/]]')
+      .link(() => RatingController(context));
 
     return router;
   }
