@@ -1,0 +1,5 @@
+username: "yannick"
+password: "yannick"
+host: "localhost"
+port: 5432
+databaseName: "studocracy_backend"

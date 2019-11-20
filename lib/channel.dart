@@ -1,11 +1,14 @@
-import 'studocracy_backend.dart';
+import 'package:studocracy_backend/model/MockData.dart';
+
 import 'controller/lecture_controller.dart';
+import 'studocracy_backend.dart';
 
 /// This type initializes an application.
 ///
 /// Override methods in this class to set up routes and initialize services like
 /// database connections. See http://aqueduct.io/docs/http/channel/.
 class StudocracyBackendChannel extends ApplicationChannel {
+  ManagedContext context;
   /// Initialize services in this method.
   ///
   /// Implement this method to initialize services, read values from [options]
@@ -15,6 +18,9 @@ class StudocracyBackendChannel extends ApplicationChannel {
   @override
   Future prepare() async {
     logger.onRecord.listen((rec) => print("$rec ${rec.error ?? ""} ${rec.stackTrace ?? ""}"));
+    var dataModel = ManagedDataModel.fromCurrentMirrorSystem();
+    var psc = PostgreSQLPersistentStore.fromConnectionInfo('yannick', 'yannick', 'localhost', 5432, 'studocracy_backend');
+    context = ManagedContext(dataModel, psc);
   }
 
   /// Construct the request channel.
@@ -29,7 +35,7 @@ class StudocracyBackendChannel extends ApplicationChannel {
 
     router
         .route('/lectures/[:id/[:category]]')
-        .link(()=>LectureController());
+        .link(()=>LectureController(context));
 
 
     // Prefer to use `link` instead of `linkFunction`.

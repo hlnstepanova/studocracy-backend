@@ -7,32 +7,30 @@ import '../model/lecture_posted.dart';
 import '../model/rating.dart';
 
 class LectureController extends ResourceController{
+  LectureController(this.context);
+  final ManagedContext context;
   var uuid = Uuid();
-  final _lectures = [
-    Lecture("lectureId3","Betriebssysteme", DateTime.now().add(const Duration(minutes: 90))),
-    Lecture("lectureId4","HSCodesign", DateTime.now().add(const Duration(minutes: 90))),
+  List<Lecture> _lectures = [
+    Lecture("lectureId3","Betriebssysteme", DateTime.now().add(const Duration(minutes: 90)), new ManagedSet(), new ManagedSet()),
+    Lecture("lectureId4","HSCodesign", DateTime.now().add(const Duration(minutes: 90)), new ManagedSet(), new ManagedSet())/*,
     Lecture.sample(
       "lectureId1",
       "AppDev and bla",
       DateTime.now().add(const Duration(minutes: 90)),
-      {
-        "speedRatings" : [
+        [
           Rating("c1", "lectureId1", "speedRatings", 2.5),
           Rating("c3", "lectureId1", "speedRatings", 9.0),
           Rating("c2", "lectureId1", "speedRatings", 8.0)
         ],
-
-        "sizeRatings" : [
+        [
           Rating("c1", "lectureId1", "sizeRatings", 4.4),
           Rating("c3", "lectureId1", "sizeRatings", 5.6)
         ],
-
-        "interestRatings" : [
+        [
           Rating("c1", "lectureId1", "interestRatings", 2.1),
           Rating("c2", "lectureId1", "interestRatings", 5.2),
           Rating("c3", "lectureId1", "interestRatings", 9.3)
-        ]
-      },
+        ],
         [
           Feedback("c1","lectureId1","Cool lecture", 8),
           Feedback("c2","lectureId1","Nice shirt", 9),
@@ -70,12 +68,13 @@ class LectureController extends ResourceController{
           Feedback("c3","lectureId2","Very oring", 1),
           Feedback("c1","lectureId2","Can I go?", 3)
         ]
-    )
+    )*/
   ];
 
   @Operation.get()
   Future<Response> getAllLectures() async {
-    return Response.ok(_lectures);
+    final query = Query<LectureDBmodel>(context);
+    return Response.ok(await query.fetch());
   }
 
   @Operation.get('id', 'category')
@@ -86,7 +85,7 @@ class LectureController extends ResourceController{
       return Response.notFound();
     }
 
-    final ratings = lecture.ratings[category];
+    final ratings = lecture.ratings;
 
     var result = ratings.map((rating) => rating.value).reduce((a, b) => a + b) / ratings.length;
     return Response.ok(result);
@@ -106,7 +105,7 @@ class LectureController extends ResourceController{
   @Operation.post()
   Future<Response>createLecture(@Bind.body() LecturePosted lecturePosted) async{
     String id = uuid.v4();
-    final lecture = Lecture(id, lecturePosted.title, lecturePosted.endTime);
+    final lecture = Lecture(id, lecturePosted.title, lecturePosted.endTime, new ManagedSet(), new ManagedSet());
     try{
       _lectures.add(lecture);
       print("Added a lecture");
@@ -114,8 +113,7 @@ class LectureController extends ResourceController{
       catch (e){
       print(e);
     }
-
-
+    print(_lectures.hashCode);
     return Response.ok(lecture);
   }
 

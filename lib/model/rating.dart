@@ -1,17 +1,23 @@
 import 'package:studocracy_backend/studocracy_backend.dart';
 
-class Rating extends Serializable {
-  Rating(this.clientId, this.lectureId, this.category, this.value);
+import 'lecture.dart';
 
+class RatingDBmodel extends ManagedObject<Rating> implements Rating{}
+
+class Rating extends Serializable {
+  Rating(this.clientId, this.lecture, this.category, this.value);
+
+  @primaryKey
   String clientId;
-  String lectureId;
+  @Relate(#ratings)
+  LectureDBmodel lecture;
   String category;
   double value;
 
   @override
   Map<String, dynamic> asMap() => {
     "clientId": clientId,
-    "lectureId": lectureId,
+    "lectureId": lecture.id,
     "category": category,
     "value": value
   };
@@ -19,7 +25,7 @@ class Rating extends Serializable {
   @override
   void readFromMap(Map<String, dynamic> object) {
     clientId = object['clientId'] as String;
-    lectureId = object['lectureId'] as String;
+    lecture = object['lectureId'] as LectureDBmodel;
     category = object['category'] as String;
     value = object['value'] as double;
   }
