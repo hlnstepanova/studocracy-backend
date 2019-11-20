@@ -23,11 +23,11 @@ class Feedback extends Serializable{
     };
 
   @override
-  void readFromMap(Map<String, dynamic> inputMap) {
-    clientId = inputMap['clientId'] as String;
-    lecture = inputMap['lectureId'] as LectureDBmodel;
-    message = inputMap['message'] as String;
-    sentiment = inputMap['clientId'] as int;
+  void readFromMap(Map<String, dynamic> object) {
+    clientId = object['clientId'] as String;
+    lecture = object['lectureId'] as LectureDBmodel;
+    message = object['message'] as String;
+    sentiment = object['clientId'] as int;
   }
 
   }

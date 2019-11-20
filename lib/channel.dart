@@ -1,5 +1,3 @@
-import 'package:studocracy_backend/model/MockData.dart';
-
 import 'controller/lecture_controller.dart';
 import 'studocracy_backend.dart';
 
@@ -18,8 +16,8 @@ class StudocracyBackendChannel extends ApplicationChannel {
   @override
   Future prepare() async {
     logger.onRecord.listen((rec) => print("$rec ${rec.error ?? ""} ${rec.stackTrace ?? ""}"));
-    var dataModel = ManagedDataModel.fromCurrentMirrorSystem();
-    var psc = PostgreSQLPersistentStore.fromConnectionInfo('yannick', 'yannick', 'localhost', 5432, 'studocracy_backend');
+    final dataModel = ManagedDataModel.fromCurrentMirrorSystem();
+    final psc = PostgreSQLPersistentStore.fromConnectionInfo('yannick', 'yannick', 'localhost', 5432, 'studocracy_backend');
     context = ManagedContext(dataModel, psc);
   }
 

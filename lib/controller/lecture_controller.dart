@@ -1,13 +1,10 @@
 import 'package:aqueduct/aqueduct.dart';
 import 'package:studocracy_backend/studocracy_backend.dart';
-import 'package:uuid/uuid.dart';
 import '../model/lecture.dart';
-import '../model/lecture_posted.dart';
 
 class LectureController extends ResourceController{
   LectureController(this.context);
   final ManagedContext context;
-  var uuid = Uuid();
   List<Lecture> _lectures = [
     Lecture("lectureId3","Betriebssysteme", DateTime.now().add(const Duration(minutes: 90)), new ManagedSet(), new ManagedSet()),
     Lecture("lectureId4","HSCodesign", DateTime.now().add(const Duration(minutes: 90)), new ManagedSet(), new ManagedSet())/*,
@@ -85,7 +82,7 @@ class LectureController extends ResourceController{
 
     final ratings = lecture.ratings;
 
-    var result = ratings.map((rating) => rating.value).reduce((a, b) => a + b) / ratings.length;
+    final result = ratings.map((rating) => rating.value).reduce((a, b) => a + b) / ratings.length;
     return Response.ok(result);
   }
 
@@ -111,7 +108,7 @@ class LectureController extends ResourceController{
   }
 
   String generateId(List<Lecture> allLectures)  {
-     final Set occupiedNames = Set();
+     final Set occupiedNames = <LectureDBmodel>{};
      for(Lecture l in allLectures){
        occupiedNames.add(l.id);
      }
