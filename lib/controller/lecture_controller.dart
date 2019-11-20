@@ -1,10 +1,8 @@
 import 'package:aqueduct/aqueduct.dart';
 import 'package:studocracy_backend/studocracy_backend.dart';
 import 'package:uuid/uuid.dart';
-import '../model/feedback.dart';
 import '../model/lecture.dart';
 import '../model/lecture_posted.dart';
-import '../model/rating.dart';
 
 class LectureController extends ResourceController{
   LectureController(this.context);
@@ -103,19 +101,26 @@ class LectureController extends ResourceController{
   }
 
   @Operation.post()
-  Future<Response>createLecture(@Bind.body() LecturePosted lecturePosted) async{
-    String id = uuid.v4();
-    final lecture = Lecture(id, lecturePosted.title, lecturePosted.endTime, new ManagedSet(), new ManagedSet());
-    try{
-      _lectures.add(lecture);
-      print("Added a lecture");
-    }
-      catch (e){
-      print(e);
-    }
-    print(_lectures.hashCode);
-    return Response.ok(lecture);
+  Future<Response>createLecture(@Bind.body() LectureDBmodel lectureDBmodel) async{
+    final fetchLecturesQuery = Query<LectureDBmodel>(context);
+    lectureDBmodel.id = generateId(await fetchLecturesQuery.fetch());
+    final inserLecturesQuery = Query<LectureDBmodel>(context)
+    ..values = lectureDBmodel;
+    final insertedLecture = await inserLecturesQuery.insert();
+    return Response.ok(insertedLecture);
   }
 
+  String generateId(List<Lecture> allLectures)  {
+     final Set occupiedNames = Set();
+     for(Lecture l in allLectures){
+       occupiedNames.add(l.id);
+     }
+     for(int i = 0; i >= 0; i++) {
+       if(!occupiedNames.contains("lecture${i}")) {
+         return"lecture${i}";
+       }
+     }
+     return null;
+  }
 
 }
