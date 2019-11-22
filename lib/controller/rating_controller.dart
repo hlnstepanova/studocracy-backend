@@ -42,6 +42,9 @@ class RatingController extends ResourceController {
     final fetchLectureByIdQuery = Query<LectureDBmodel>(context)
       ..where((l) => l.id).equalTo(id);
     final lecture = await fetchLectureByIdQuery.fetchOne();
+    if(lecture == null) {
+      return Response.notFound();
+    }
     // ratingDBmodel.clientId = request.raw.connectionInfo.remoteAddress.address;
     ratingDBmodel.lecture = lecture;
     final insertRatingQuery = Query<RatingDBmodel>(context)
