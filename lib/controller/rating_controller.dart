@@ -11,24 +11,26 @@ class RatingController extends ResourceController {
   // TODO: filter category
   @Operation.get('id', 'category')
   Future<Response> getRatingByCategory(@Bind.path('id') String id, @Bind.path('category') String category) async{
-    final fetchLectureByIdQuery = Query<LectureDBmodel>(context)
-      ..where((l) => l.id).equalTo(id);
-    final lecture = await fetchLectureByIdQuery.fetchOne();
-    if (lecture == null){
+    final fetchRatingsByLectureId = Query<LectureDBmodel>(context)
+      ..join(set: (lecture) => lecture.ratings)
+      ..where((lecture) => lecture.id).equalTo(id);
+    final lecture = await fetchRatingsByLectureId.fetchOne();
+    if(lecture == null) {
       return Response.notFound();
     }
-    return Response.ok(lecture);
+    return Response.ok(lecture.ratings);
   }
 
   @Operation.get('id')
   Future<Response> getRating(@Bind.path('id') String id) async{
-    final fetchLectureByIdQuery = Query<LectureDBmodel>(context)
-      ..where((l) => l.id).equalTo(id);
-    final lecture = await fetchLectureByIdQuery.fetchOne();
-    if (lecture == null){
+    final fetchRatingsByLectureId = Query<LectureDBmodel>(context)
+      ..join(set: (lecture) => lecture.ratings)
+      ..where((lecture) => lecture.id).equalTo(id);
+    final lecture = await fetchRatingsByLectureId.fetchOne();
+    if(lecture == null) {
       return Response.notFound();
     }
-    return Response.ok(lecture);
+    return Response.ok(lecture.ratings);
   }
 
   /*
