@@ -12,17 +12,6 @@ class LectureController extends ResourceController{
     return Response.ok(await fetchLecturesQuery.fetch());
   }
 
-  @Operation.get('id')
-  Future<Response> getFeedbackList(@Bind.path('id') String id) async {
-    final fetchLectureByIdQuery = Query<LectureDBmodel>(context)
-      ..where((l) => l.id).equalTo(id);
-    final lecture = await fetchLectureByIdQuery.fetchOne();
-    if (lecture == null){
-      return Response.notFound();
-    }
-    return Response.ok(lecture);
-  }
-
   @Operation.post()
   Future<Response> createLecture(@Bind.body() LectureDBmodel lectureDBmodel) async {
     final fetchLecturesQuery = Query<LectureDBmodel>(context);

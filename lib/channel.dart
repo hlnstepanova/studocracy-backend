@@ -1,3 +1,4 @@
+import 'package:studocracy_backend/controller/feedback_controller.dart';
 import 'package:studocracy_backend/controller/rating_controller.dart';
 
 import 'controller/lecture_controller.dart';
@@ -40,6 +41,10 @@ class StudocracyBackendChannel extends ApplicationChannel {
     router
       .route('/rating/[:id/[:category/]]')
       .link(() => RatingController(context));
+
+    router
+      .route('/feedback/[:id/]')
+      .link(() => FeedbackController(context));
 
     return router;
   }

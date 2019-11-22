@@ -13,5 +13,4 @@ class Feedback {
   LectureDBmodel lecture;
   String message;
   int sentiment;
-
 }
