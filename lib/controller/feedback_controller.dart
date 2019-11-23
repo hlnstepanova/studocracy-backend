@@ -11,10 +11,10 @@ class FeedbackController extends ResourceController {
 
   @Operation.get('id')
   Future<Response> getFeedback(@Bind.path('id') String id) async{
-    final fetchFeedbackssByLectureId = Query<LectureDBmodel>(context)
+    final fetchFeedbacksByLectureId = Query<LectureDBmodel>(context)
       ..join(set: (lecture) => lecture.feedbackList)
       ..where((lecture) => lecture.id).equalTo(id);
-    final lecture = await fetchFeedbackssByLectureId.fetchOne();
+    final lecture = await fetchFeedbacksByLectureId.fetchOne();
     if(lecture == null) {
       return Response.notFound();
     }
@@ -27,9 +27,10 @@ class FeedbackController extends ResourceController {
   */
   @Operation.post('id')
   Future<Response> giveFeedback(@Bind.path('id') String id, @Bind.body() FeedbackDBmodel feedbackDBmodel) async {
-    final fetchLectureByIdQuery = Query<LectureDBmodel>(context)
+    /*final fetchLectureByIdQuery = Query<LectureDBmodel>(context)
       ..where((l) => l.id).equalTo(id);
-    final lecture = await fetchLectureByIdQuery.fetchOne();
+    final lecture = await fetchLectureByIdQuery.fetchOne();*/
+    final lecture = await context.fetchObjectWithID<LectureDBmodel>(id);
     if(lecture == null){
       return Response.notFound();
     }
