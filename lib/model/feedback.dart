@@ -9,8 +9,9 @@ class Feedback {
 
   @primaryKey
   String clientId;
-  @Relate(#feedbackList)
-  LectureDBmodel lecture;
   String message;
   int sentiment;
+
+  @Relate(#feedbackList)
+  LectureDBmodel lecture;
 }

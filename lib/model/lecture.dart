@@ -8,7 +8,7 @@ class Lecture {
 
   Lecture(this.id, this.title, this.endTime, this.ratings, this.feedbackList);
 
-  @Column(primaryKey: true)
+  @primaryKey
   String id;
   String clientId;
   String title;

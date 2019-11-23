@@ -8,9 +8,10 @@ class Rating {
 
   @primaryKey
   String clientId;
-  @Relate(#ratings)
-  LectureDBmodel lecture;
   String category;
   double value;
+
+  @Relate(#ratings)
+  LectureDBmodel lecture;
 
 }
