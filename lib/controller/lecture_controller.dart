@@ -105,10 +105,16 @@ class LectureController extends ResourceController{
 
   @Operation.post()
   Future<Response>createLecture(@Bind.body() LecturePosted lecturePosted) async{
-
     String id = uuid.v4();
     final lecture = Lecture(id, lecturePosted.title, lecturePosted.endTime);
-    _lectures.add(lecture);
+    try{
+      _lectures.add(lecture);
+      print("Added a lecture");
+    }
+      catch (e){
+      print(e);
+    }
+
 
     return Response.ok(lecture);
   }
