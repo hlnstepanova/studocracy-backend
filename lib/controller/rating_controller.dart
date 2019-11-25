@@ -40,8 +40,9 @@ class RatingController extends ResourceController {
     if(lecture == null) {
       return Response.notFound();
     }
+    ratingDBmodel.lecture = lecture;
     final insertRatingQuery = Query<RatingDBmodel>(context)
-    ..values = ratingDBmodel;
+      ..values = ratingDBmodel;
     final insertedRating = await insertRatingQuery.insert();
     return Response.ok(insertedRating);
   }
