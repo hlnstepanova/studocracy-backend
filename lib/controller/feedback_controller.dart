@@ -27,14 +27,10 @@ class FeedbackController extends ResourceController {
   */
   @Operation.post('id')
   Future<Response> giveFeedback(@Bind.path('id') String id, @Bind.body() FeedbackDBmodel feedbackDBmodel) async {
-    /*final fetchLectureByIdQuery = Query<LectureDBmodel>(context)
-      ..where((l) => l.id).equalTo(id);
-    final lecture = await fetchLectureByIdQuery.fetchOne();*/
     final lecture = await context.fetchObjectWithID<LectureDBmodel>(id);
     if(lecture == null){
       return Response.notFound();
     }
-    // ratingDBmodel.clientId = request.raw.connectionInfo.remoteAddress.address;
     feedbackDBmodel.lecture = lecture;
     final insertFeedbackQuery = Query<FeedbackDBmodel>(context)
       ..values = feedbackDBmodel;
