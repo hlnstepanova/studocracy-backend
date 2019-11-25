@@ -15,16 +15,18 @@ class LectureController extends ResourceController{
   @Operation.post()
   Future<Response> createLecture(@Bind.body() LectureDBmodel lectureDBmodel) async {
     final fetchLecturesQuery = Query<LectureDBmodel>(context);
-    lectureDBmodel.id = generateId(await fetchLecturesQuery.fetch());
-    lectureDBmodel.clientId = request.raw.connectionInfo.remoteAddress.address;
-    final insertLectureQuery = Query<LectureDBmodel>(context)
-    ..values = lectureDBmodel;
-    final insertedLecture = await insertLectureQuery.insert();
-    return Response.ok(insertedLecture);
+    var newId = generateId(await fetchLecturesQuery.fetch());
+    print(newId);
+    print(lectureDBmodel.id);
+    lectureDBmodel.id = newId;
+    return Response.ok(lectureDBmodel);
   }
 
   String generateId(List<Lecture> allLectures) {
      final Set occupiedNames = <String>{};
+     if (occupiedNames.isEmpty){
+       return "lecture0";
+     }
      for(Lecture l in allLectures){
        occupiedNames.add(l.id);
      }

@@ -8,9 +8,8 @@ class Lecture {
 
   Lecture(this.id, this.title, this.endTime, this.ratings, this.feedbackList);
 
-  @primaryKey
+  @Column(primaryKey: true)
   String id;
-  String clientId;
   String title;
   DateTime endTime;
   ManagedSet<RatingDBmodel> ratings;
