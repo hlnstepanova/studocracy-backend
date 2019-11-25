@@ -16,9 +16,7 @@ class LectureController extends ResourceController{
   Future<Response> createLecture(@Bind.body() LectureDBmodel lectureDBmodel) async {
     final fetchLecturesQuery = Query<LectureDBmodel>(context);
     print(lectureDBmodel.id);
-    var newId = generateId(await fetchLecturesQuery.fetch());
-    print(newId);
-    lectureDBmodel.id = newId;
+    lectureDBmodel.id = generateId(await fetchLecturesQuery.fetch());
     final insertLectureQuery = Query<LectureDBmodel>(context)
     ..values = lectureDBmodel;
     final insertedLecture = await insertLectureQuery.insert();
