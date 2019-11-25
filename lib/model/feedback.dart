@@ -7,7 +7,7 @@ class Feedback {
 
   Feedback(this.clientId, this.lecture, this.message, this.sentiment);
 
-  @primaryKey
+  @Column(primaryKey: true)
   String clientId;
   String message;
   int sentiment;
