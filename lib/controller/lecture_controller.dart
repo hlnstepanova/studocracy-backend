@@ -28,9 +28,6 @@ class LectureController extends ResourceController{
      for(Lecture l in allLectures){
        occupiedNames.add(l.id);
      }
-     if (occupiedNames.isEmpty){
-       return "lecture0";
-     }
      for(int i = 0; i >= 0; i++) {
        if(!occupiedNames.contains("lecture${i}")) {
          return"lecture${i}";
