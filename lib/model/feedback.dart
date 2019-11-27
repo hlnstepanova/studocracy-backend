@@ -7,10 +7,11 @@ class Feedback {
 
   Feedback(this.clientId, this.lecture, this.message, this.sentiment);
 
-  @primaryKey
+  @Column(primaryKey: true)
   String clientId;
-  @Relate(#feedbackList)
-  LectureDBmodel lecture;
   String message;
   int sentiment;
+
+  @Relate(#feedbackList)
+  LectureDBmodel lecture;
 }

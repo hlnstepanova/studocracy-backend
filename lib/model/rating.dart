@@ -6,11 +6,12 @@ class RatingDBmodel extends ManagedObject<Rating> implements Rating{}
 class Rating {
   Rating(this.clientId, this.lecture, this.category, this.value);
 
-  @primaryKey
+  @Column(primaryKey: true)
   String clientId;
-  @Relate(#ratings)
-  LectureDBmodel lecture;
   String category;
   double value;
+
+  @Relate(#ratings)
+  LectureDBmodel lecture;
 
 }

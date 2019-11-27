@@ -10,7 +10,6 @@ class Lecture {
 
   @Column(primaryKey: true)
   String id;
-  String clientId;
   String title;
   DateTime endTime;
   ManagedSet<RatingDBmodel> ratings;

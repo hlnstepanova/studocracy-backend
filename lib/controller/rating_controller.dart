@@ -33,19 +33,13 @@ class RatingController extends ResourceController {
     return Response.ok(lecture.ratings);
   }
 
-  /*
-  clientId needs to be provided by client, not by server,
-  although it works for lectures somehow...
-  */
+
   @Operation.post('id')
   Future<Response> giveRating(@Bind.path('id') String id, @Bind.body() RatingDBmodel ratingDBmodel) async {
-    final fetchLectureByIdQuery = Query<LectureDBmodel>(context)
-      ..where((l) => l.id).equalTo(id);
-    final lecture = await fetchLectureByIdQuery.fetchOne();
+    final lecture = await context.fetchObjectWithID<LectureDBmodel>(id);
     if(lecture == null) {
       return Response.notFound();
     }
-    // ratingDBmodel.clientId = request.raw.connectionInfo.remoteAddress.address;
     ratingDBmodel.lecture = lecture;
     final insertRatingQuery = Query<RatingDBmodel>(context)
       ..values = ratingDBmodel;
