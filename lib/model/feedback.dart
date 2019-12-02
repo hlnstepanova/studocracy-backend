@@ -10,6 +10,7 @@ class Feedback {
   @Column(primaryKey: true)
   String clientId;
   String message;
+  DateTime created;
   int sentiment;
 
   @Relate(#feedbackList)

@@ -8,17 +8,22 @@ class RatingController extends ResourceController {
 
   final ManagedContext context;
 
-  // TODO: filter category
+  //TODO: needs to be tested
   @Operation.get('id', 'category')
-  Future<Response> getRatingByCategory(@Bind.path('id') String id, @Bind.path('category') String category) async{
-    final fetchRatingsByLectureId = Query<LectureDBmodel>(context)
-      ..join(set: (lecture) => lecture.ratings)
-      ..where((lecture) => lecture.id).equalTo(id);
-    final lecture = await fetchRatingsByLectureId.fetchOne();
-    if(lecture == null) {
-      return Response.notFound();
-    }
-    return Response.ok(lecture.ratings);
+  Future<Response> getRatingByCategory(@Bind.path('id') String id, @Bind.path('category') String category) async {
+    final q = Query<LectureDBmodel>(context)
+      ..where((l) => l.id).equalTo(id);
+
+    Query<RatingDBmodel> subQuery = q
+        .join(set: (l) => l.ratings)
+      ..where((r) => r.category).equalTo(category);
+
+    final averageRating = await subQuery.reduce.average((r) => r.value);
+    return Response.ok(averageRating);
+
+    //TODO: how to handle error case?
+    //return Response.notFound();
+
   }
 
   @Operation.get('id')

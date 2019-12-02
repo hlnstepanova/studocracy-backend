@@ -9,7 +9,7 @@ class Rating {
   @Column(primaryKey: true)
   String clientId;
   String category;
-  double value;
+  int value;
 
   @Relate(#ratings)
   LectureDBmodel lecture;
