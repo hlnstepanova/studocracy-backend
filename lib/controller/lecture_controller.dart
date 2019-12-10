@@ -8,14 +8,17 @@ class LectureController extends ResourceController{
 
   @Operation.get()
   Future<Response> getAllLectures() async {
+    removeOldLectures();
     final fetchLecturesQuery = Query<LectureDBmodel>(context);
+    List<LectureDBmodel> lectures = await fetchLecturesQuery.fetch();
+    lectures.retainWhere((lecture) => lecture.endTime.difference(DateTime.now()).inSeconds < 0);
     return Response.ok(await fetchLecturesQuery.fetch());
   }
 
   @Operation.post()
   Future<Response> createLecture(@Bind.body() LectureDBmodel lectureDBmodel) async {
+    removeOldLectures();
     final fetchLecturesQuery = Query<LectureDBmodel>(context);
-    print(lectureDBmodel.id);
     lectureDBmodel.id = generateId(await fetchLecturesQuery.fetch());
     final insertLectureQuery = Query<LectureDBmodel>(context)
     ..values = lectureDBmodel;
@@ -34,6 +37,18 @@ class LectureController extends ResourceController{
        }
      }
      return null;
+  }
+
+  void removeOldLectures() async {
+    final fetchLecturesQuery = Query<LectureDBmodel>(context);
+    final DateTime now = DateTime.now();
+    final List<LectureDBmodel> lectures = await fetchLecturesQuery.fetch();
+    for(int i = 0; i < lectures.length; i++){
+      if(lectures[i].endTime.difference(now).inSeconds < 0){
+        final deleteOldLectureQuery =  Query<LectureDBmodel>(context)..where((l) => l.id).equalTo(lectures[i].id);
+        await deleteOldLectureQuery.delete();
+      }
+    }
   }
 
 }
