@@ -20,7 +20,7 @@ class StudocracyBackendChannel extends ApplicationChannel {
   Future prepare() async {
     logger.onRecord.listen((rec) => print("$rec ${rec.error ?? ""} ${rec.stackTrace ?? ""}"));
     final dataModel = ManagedDataModel.fromCurrentMirrorSystem();
-    final psc = PostgreSQLPersistentStore.fromConnectionInfo('owjnrnxsxlhggn', 'c2bc47a2ddccff6e41f42886987016c717a5808f9e7a1a3f1778232227b262d9', 'ec2-46-137-120-243.eu-west-1.compute.amazonaws.com', 5432, 'dem524e10rclql');
+    final psc = PostgreSQLPersistentStore.fromConnectionInfo('bybhzicwddnmug', 'c4d444e065b07d9df5a45b982921cbcd27ee7ee9cf8cd62446e6b3354341e60a', 'ec2-54-247-96-169.eu-west-1.compute.amazonaws.com', 5432, 'dbseipa6mbbetg');
     context = ManagedContext(dataModel, psc);
   }
 
