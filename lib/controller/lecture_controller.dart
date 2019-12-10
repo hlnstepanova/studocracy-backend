@@ -1,4 +1,7 @@
+
 import 'package:aqueduct/aqueduct.dart';
+import 'package:studocracy_backend/model/feedback.dart';
+import 'package:studocracy_backend/model/rating.dart';
 import 'package:studocracy_backend/studocracy_backend.dart';
 import '../model/lecture.dart';
 
@@ -8,16 +11,14 @@ class LectureController extends ResourceController{
 
   @Operation.get()
   Future<Response> getAllLectures() async {
-    removeOldLectures();
+    await removeOldLectures(context);
     final fetchLecturesQuery = Query<LectureDBmodel>(context);
-    List<LectureDBmodel> lectures = await fetchLecturesQuery.fetch();
-    lectures.retainWhere((lecture) => lecture.endTime.difference(DateTime.now()).inSeconds < 0);
     return Response.ok(await fetchLecturesQuery.fetch());
   }
 
   @Operation.post()
   Future<Response> createLecture(@Bind.body() LectureDBmodel lectureDBmodel) async {
-    removeOldLectures();
+    await removeOldLectures(context);
     final fetchLecturesQuery = Query<LectureDBmodel>(context);
     lectureDBmodel.id = generateId(await fetchLecturesQuery.fetch());
     final insertLectureQuery = Query<LectureDBmodel>(context)
@@ -39,16 +40,29 @@ class LectureController extends ResourceController{
      return null;
   }
 
-  void removeOldLectures() async {
+  static Future removeOldLectures(ManagedContext context) async {
     final fetchLecturesQuery = Query<LectureDBmodel>(context);
-    final DateTime now = DateTime.now();
     final List<LectureDBmodel> lectures = await fetchLecturesQuery.fetch();
     for(int i = 0; i < lectures.length; i++){
-      if(lectures[i].endTime.difference(now).inSeconds < 0){
+      print(DateTime.now());
+      print(lectures[i].endTime);
+      if(lectures[i].endTime.difference(DateTime.now()).inSeconds < 0){
         final deleteOldLectureQuery =  Query<LectureDBmodel>(context)..where((l) => l.id).equalTo(lectures[i].id);
         await deleteOldLectureQuery.delete();
+        await _removeOldRatings(lectures[i], context);
+        await _removeOldFeedback(lectures[i], context);
       }
     }
+  }
+
+  static Future _removeOldRatings(Lecture lecture, ManagedContext context) async {
+    final deleteOldRatingsQuery =  Query<RatingDBmodel>(context)..where((r) => r.lecture.id).equalTo(lecture.id);
+    await deleteOldRatingsQuery.delete();
+  }
+
+   static Future _removeOldFeedback(Lecture lecture, ManagedContext context) async {
+    final deleteOldFeedbackQuery =  Query<FeedbackDBmodel>(context)..where((f) => f.lecture.id).equalTo(lecture.id);
+    await deleteOldFeedbackQuery.delete();
   }
 
 }

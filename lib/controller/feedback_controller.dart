@@ -1,8 +1,9 @@
 import 'package:aqueduct/aqueduct.dart';
 import 'package:studocracy_backend/model/feedback.dart';
 import 'package:studocracy_backend/model/lecture.dart';
-import 'package:studocracy_backend/model/rating.dart';
 import 'package:studocracy_backend/studocracy_backend.dart';
+
+import 'lecture_controller.dart';
 
 class FeedbackController extends ResourceController {
   FeedbackController(this.context);
@@ -11,6 +12,7 @@ class FeedbackController extends ResourceController {
 
   @Operation.get('id')
   Future<Response> getFeedback(@Bind.path('id') String id) async{
+    await LectureController.removeOldLectures(context);
     final fetchFeedbacksByLectureId = Query<LectureDBmodel>(context)
       ..join(set: (lecture) => lecture.feedbackList)
       ..where((lecture) => lecture.id).equalTo(id);
@@ -21,12 +23,9 @@ class FeedbackController extends ResourceController {
     return Response.ok(lecture.feedbackList);
   }
 
-  /*
-  clientId needs to be provided by client, not by server,
-  although it works for lectures somehow...
-  */
   @Operation.post('id')
   Future<Response> giveFeedback(@Bind.path('id') String id, @Bind.body() FeedbackDBmodel feedbackDBmodel) async {
+    await LectureController.removeOldLectures(context);
     final lecture = await context.fetchObjectWithID<LectureDBmodel>(id);
     if(lecture == null){
       return Response.notFound();

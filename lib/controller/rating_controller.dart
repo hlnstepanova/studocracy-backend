@@ -2,6 +2,7 @@ import 'package:aqueduct/aqueduct.dart';
 import 'package:studocracy_backend/model/lecture.dart';
 import 'package:studocracy_backend/model/rating.dart';
 import 'package:studocracy_backend/studocracy_backend.dart';
+import '../controller/lecture_controller.dart';
 
 class RatingController extends ResourceController {
   RatingController(this.context);
@@ -10,9 +11,9 @@ class RatingController extends ResourceController {
 
   @Operation.get('id', 'category')
   Future<Response> getRatingByCategory(@Bind.path('id') String id, @Bind.path('category') String category) async {
+    await LectureController.removeOldLectures(context);
     final q = Query<LectureDBmodel>(context)
       ..where((l) => l.id).equalTo(id);
-
     final Query<RatingDBmodel> subQuery = q
         .join(set: (l) => l.ratings)
       ..where((r) => r.category).equalTo(category);
@@ -26,6 +27,7 @@ class RatingController extends ResourceController {
 
   @Operation.get('id')
   Future<Response> getRating(@Bind.path('id') String id) async{
+    await LectureController.removeOldLectures(context);
     final fetchRatingsByLectureId = Query<LectureDBmodel>(context)
       ..join(set: (lecture) => lecture.ratings)
       ..where((lecture) => lecture.id).equalTo(id);
@@ -39,6 +41,7 @@ class RatingController extends ResourceController {
 
   @Operation.post('id')
   Future<Response> giveRating(@Bind.path('id') String id, @Bind.body() RatingDBmodel ratingDBmodel) async {
+    await LectureController.removeOldLectures(context);
     final lecture = await context.fetchObjectWithID<LectureDBmodel>(id);
     if(lecture == null) {
       return Response.notFound();
