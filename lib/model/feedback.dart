@@ -5,8 +5,6 @@ class FeedbackDBmodel extends ManagedObject<Feedback> implements Feedback{}
 
 class Feedback {
 
-  Feedback(this.clientId, this.lecture, this.message, this.sentiment);
-
   @Column(primaryKey: true)
   String clientId;
   String message;

@@ -6,8 +6,6 @@ class LectureDBmodel extends ManagedObject<Lecture> implements Lecture{}
 
 class Lecture {
 
-  Lecture(this.id, this.title, this.endTime, this.ratings, this.feedbackList);
-
   @Column(primaryKey: true)
   String id;
   String title;
