@@ -40,12 +40,11 @@ class LectureController extends ResourceController{
      return null;
   }
 
+  // TODO: The DateTime in the DB seems to be 3 hours later ???
   static Future removeOldLectures(ManagedContext context) async {
     final fetchLecturesQuery = Query<LectureDBmodel>(context);
     final List<LectureDBmodel> lectures = await fetchLecturesQuery.fetch();
     for(int i = 0; i < lectures.length; i++){
-      print(DateTime.now());
-      print(lectures[i].endTime);
       if(lectures[i].endTime.difference(DateTime.now()).inSeconds < 0){
         final deleteOldLectureQuery =  Query<LectureDBmodel>(context)..where((l) => l.id).equalTo(lectures[i].id);
         await deleteOldLectureQuery.delete();
