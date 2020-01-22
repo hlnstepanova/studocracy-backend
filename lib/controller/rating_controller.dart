@@ -9,7 +9,7 @@ class RatingController extends ResourceController {
 
   final ManagedContext context;
 
-  // returns the average of ALL ratings, not matching category or lectureID
+  // TODO: returns the average of ALL ratings, not matching category or lectureID
   @Operation.get('id', 'category')
   Future<Response> getRatingByCategory(@Bind.path('id') String id, @Bind.path('category') String category) async {
     await LectureController.removeOldLectures(context);
@@ -55,7 +55,8 @@ class RatingController extends ResourceController {
     } else {
       final deleteRatings = Query<RatingDBmodel>(context)
         ..where((r) => r.clientId).equalTo(ratingDBmodel.clientId)
-        ..where((r) => r.lecture.id).equalTo(ratingDBmodel.lecture.id);
+        ..where((r) => r.lecture.id).equalTo(ratingDBmodel.lecture.id)
+        ..where((r) => r.category).equalTo(ratingDBmodel.category);
       await deleteRatings.delete();
     }
     final fetchAllRatings = Query<RatingDBmodel>(context);
@@ -75,7 +76,9 @@ class RatingController extends ResourceController {
       bool beforeFiveMinutes = true;
       for(Rating rat in ratings) {
         if(rat.created.difference(rating.created).inMinutes > -5){
-          beforeFiveMinutes = false;
+          if(rat.category == rating.category){
+            beforeFiveMinutes = false;
+          }
         }
       }
       return beforeFiveMinutes;
