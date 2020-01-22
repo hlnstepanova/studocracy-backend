@@ -13,13 +13,11 @@ class RatingController extends ResourceController {
   @Operation.get('id', 'category')
   Future<Response> getRatingByCategory(@Bind.path('id') String id, @Bind.path('category') String category) async {
     await LectureController.removeOldLectures(context);
-    final q = Query<LectureDBmodel>(context)
-      ..where((l) => l.id).equalTo(id);
-    final Query<RatingDBmodel> subQuery = q
-        .join(set: (l) => l.ratings)
+    final q = Query<RatingDBmodel>(context)
+      ..where((l) => l.lecture.id).equalTo(id)
       ..where((r) => r.category).equalTo(category);
-    print((await subQuery.fetch()).length);
-    final averageRating = await subQuery.reduce.average((r) => r.value);
+    print((await q.fetch()).length);
+    final averageRating = await q.reduce.average((r) => r.value);
     if(averageRating == null){
       return Response.notFound();
     }
