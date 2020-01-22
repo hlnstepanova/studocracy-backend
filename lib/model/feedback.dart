@@ -6,6 +6,7 @@ class FeedbackDBmodel extends ManagedObject<Feedback> implements Feedback{}
 class Feedback {
 
   @Column(primaryKey: true)
+  int id;
   String clientId;
   String message;
   DateTime created;

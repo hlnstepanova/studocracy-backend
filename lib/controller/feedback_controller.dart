@@ -31,9 +31,44 @@ class FeedbackController extends ResourceController {
       return Response.notFound();
     }
     feedbackDBmodel.lecture = lecture;
+    feedbackDBmodel.created = DateTime.now();
+    bool isValid = await checkForExistingFeedback(feedbackDBmodel);
+    if(!isValid) {
+      return Response.badRequest();
+    }
+    final fetchAllFeedbacks = Query<FeedbackDBmodel>(context);
+    final int newId = generateId(await fetchAllFeedbacks.fetch());
+    feedbackDBmodel.id = newId;
     final insertFeedbackQuery = Query<FeedbackDBmodel>(context)
       ..values = feedbackDBmodel;
     final insertedFeedback = await insertFeedbackQuery.insert();
     return Response.ok(insertedFeedback);
+  }
+
+  Future<bool> checkForExistingFeedback(FeedbackDBmodel feedback) async {
+    final fetchFeedbacks = Query<FeedbackDBmodel>(context)
+      ..where((r) => r.clientId).equalTo(feedback.clientId)
+      ..where((r) => r.lecture.id).equalTo(feedback.lecture.id);
+    final List<Feedback> feedbacks = await fetchFeedbacks.fetch();
+    bool beforeFiveMinutes = true;
+    for(Feedback feed in feedbacks) {
+      if(feed.created.difference(feedback.created).inMinutes > -5){
+        beforeFiveMinutes = false;
+      }
+    }
+    return beforeFiveMinutes;
+  }
+
+  int generateId(List<Feedback> allFeedbacks) {
+    final Set occupiedIds = <int>{};
+    for(Feedback f in allFeedbacks){
+      occupiedIds.add(f.id);
+    }
+    for(int i = 0; i >= 0; i++) {
+      if(!occupiedIds.contains(i)) {
+        return i;
+      }
+    }
+    return 0;
   }
 }

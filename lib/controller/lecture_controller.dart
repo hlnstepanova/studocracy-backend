@@ -11,6 +11,7 @@ class LectureController extends ResourceController{
 
   @Operation.get()
   Future<Response> getAllLectures() async {
+    print(DateTime.now());
     await removeOldLectures(context);
     final fetchLecturesQuery = Query<LectureDBmodel>(context);
     return Response.ok(await fetchLecturesQuery.fetch());
